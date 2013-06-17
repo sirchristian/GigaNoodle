@@ -1,0 +1,17 @@
+syntax: glob
+
+_UpgradReport_Files
+Backup
+UpgradeLog.XML
+
+bin
+obj
+*.suo
+*.docstates
+*.user
+*.orig
+*.rej
+TestResult.xml
+TestResults.xml
+StyleCop.Cache
+*~

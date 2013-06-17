@@ -1,0 +1,2 @@
+- Use NuGet Packages
+- Create Attribute that can be used on QueueItems and passed into KnownTypes for data contract serialization
