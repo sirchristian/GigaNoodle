@@ -19,11 +19,11 @@ namespace GigaNoodle.Library
 		/// <typeparam name="T"></typeparam>
 		/// <param name="item"></param>
 		/// <returns></returns>
-		public static string Deserialize<T>(T item)
+		public static string Deserialize<T>(T item, params Type[] knownTypes)
 		{
 			using (var stream = new MemoryStream())
 			{
-				var serializer = new DataContractSerializer(typeof(T));
+				var serializer = new DataContractSerializer(typeof(T), knownTypes);
 				serializer.WriteObject(stream, item);
 
 				stream.Position = 0;

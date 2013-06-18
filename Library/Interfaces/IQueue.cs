@@ -23,6 +23,11 @@ namespace GigaNoodle.Library.Interfaces
 		int Priority { get; }
 
 		/// <summary>
+		/// Types of items that can get pushed on the queue
+		/// </summary>
+		Type[] KnownTypes { get; }
+
+		/// <summary>
 		/// Pushes an item on the queue
 		/// </summary>
 		/// <param name="item"></param>

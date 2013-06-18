@@ -11,10 +11,12 @@ namespace GigaNoodle.Tests.QueueTests
 	public class QueueingTests : BaseTest
 	{
 		[TestMethod]
-		public void TestMethod1()
+		public void TestQueueName()
 		{
 			IQueue queue = TestingKernel.Get<IQueue>();
 			Assert.IsTrue(queue.Name == "Test");
 		}
+
+
 	}
 }

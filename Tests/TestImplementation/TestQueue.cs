@@ -21,24 +21,44 @@ namespace GigaNoodle.Tests.TestImplementation
 			get { return "Test"; }
 		}
 
+		/// <summary>
+		/// 1
+		/// </summary>
 		public int Priority
 		{
 			get { return 1; }
 		}
 
+		/// <summary>
+		/// Known types of items that can go in the test queue
+		/// </summary>
+		public Type[] KnownTypes
+		{
+			get { return _knownTypes; }
+		}
+		private static readonly Type[] _knownTypes = new Type[] { typeof(TestQueueItem) };
+
+		/// <summary>
+		/// Pushes onto a memory queue
+		/// </summary>
+		/// <param name="item"></param>
 		public void Push(QueueItem item)
 		{
-			throw new NotImplementedException();
+			_memoryQueue.Enqueue(item);
 		}
 
+		/// <summary>
+		/// Pops from a memory queue
+		/// </summary>
+		/// <returns></returns>
 		public QueueItem Pop()
 		{
-			throw new NotImplementedException();
+			return _memoryQueue.Dequeue();
 		}
 
 		/// <summary>
 		/// An in memory queue we use for testing
 		/// </summary>
-		private Queue<string> _memoryQueue = new Queue<string>();
+		private Queue<QueueItem> _memoryQueue = new Queue<QueueItem>();
 	}
 }

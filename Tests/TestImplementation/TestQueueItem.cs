@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GigaNoodle.Tests.TestImplementation
 {
+	[DataContract]
 	public class TestQueueItem : QueueItem
 	{
 		[DataMember]
@@ -19,10 +20,9 @@ namespace GigaNoodle.Tests.TestImplementation
 		public int NonSerializableInt { get; set; }
 		public string NonSerializableString { get; set; }
 
-
 		public override void DoWork()
 		{
-			return;
+			Console.WriteLine("Doing Test work");
 		}
 	}
 }
