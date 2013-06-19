@@ -13,5 +13,6 @@ obj
 *.rej
 TestResult.xml
 TestResults.xml
+TestResults\*
 StyleCop.Cache
 *~

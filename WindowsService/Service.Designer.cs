@@ -1,6 +1,6 @@
 ﻿namespace GigaNoodle.WindowsService
 {
-	partial class Service
+	internal partial class Service
 	{
 		/// <summary> 
 		/// Required designer variable.

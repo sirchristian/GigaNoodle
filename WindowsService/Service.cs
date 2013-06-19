@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GigaNoodle.WindowsService
 {
-	partial class Service : ServiceBase
+	internal partial class Service : ServiceBase
 	{
 		public List<IQueue> TheQueues { get; set; }
 

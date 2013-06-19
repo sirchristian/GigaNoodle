@@ -12,6 +12,9 @@ namespace GigaNoodle.Tests.TestImplementation
 	public class TestQueueItem : QueueItem
 	{
 		[DataMember]
+		public string WillChangeOnDoWork { get; set; }
+
+		[DataMember]
 		public int SerializableInt { get; set; }
 
 		[DataMember]
@@ -23,6 +26,9 @@ namespace GigaNoodle.Tests.TestImplementation
 		public override void DoWork()
 		{
 			Console.WriteLine("Doing Test work");
+			WillChangeOnDoWork = DidWorkString;
 		}
+
+		public static string DidWorkString = "### Did work ###";
 	}
 }

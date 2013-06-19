@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -66,6 +67,14 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{10eff366-bdab-4527-9413-9f68092ccafd}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MemoryQueue\MemoryQueue.csproj">
+      <Project>{562f29f3-eda6-48f0-9ed5-b29853ee2461}</Project>
+      <Name>MemoryQueue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowsService\WindowsService.csproj">
+      <Project>{fec8f72a-41b7-49f0-a37f-3ef21d74cdf3}</Project>
+      <Name>WindowsService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -53,7 +53,10 @@ namespace GigaNoodle.Tests.TestImplementation
 		/// <returns></returns>
 		public QueueItem Pop()
 		{
-			return _memoryQueue.Dequeue();
+			if (_memoryQueue.Count > 0)
+				return _memoryQueue.Dequeue();
+
+			return null;
 		}
 
 		/// <summary>
