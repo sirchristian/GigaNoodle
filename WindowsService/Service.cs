@@ -1,4 +1,5 @@
 ﻿using GigaNoodle.Library.Interfaces;
+using GigaNoodle.Library.Objects;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -39,18 +40,25 @@ namespace GigaNoodle.WindowsService
 		internal void Start()
 		{
 			// Queue up a task
-			var task = Task
-				.Run(() => WorkOnItem())
-				.ContinueWith(t => _currentRunningTasks.Remove(t));
-
-			_currentRunningTasks.Add(task);
+			var task = CreateDoWorkTask();
 		}
 
 		private void WorkOnItem()
 		{
-			// do the work
-			var item = TheQueues[0].Pop();
+			// Sort queues
+			TheQueues.Sort(QueueComparer.Comparer);
 
+			// Walk the queues to get a work item
+			QueueItem item = null;
+			for (int x = 0; x < TheQueues.Count; x++)
+			{
+				// NOTE: if the high priory queues gets flooded we could starve lower priority queues
+				item = TheQueues[x].Pop();
+				if (item != null)
+					break;
+			}
+
+			// do the work if we have any
 			if (item != null)
 				item.DoWork();
 			else
@@ -58,13 +66,18 @@ namespace GigaNoodle.WindowsService
 
 			// if not stopping queue up another task
 			if (!stopping)
-			{
-				var task = Task
-					.Run(() => WorkOnItem())
-					.ContinueWith(t => _currentRunningTasks.Remove(t));
+				CreateDoWorkTask();
+		}
 
-				_currentRunningTasks.Add(task);
-			}
+		private Task CreateDoWorkTask()
+		{
+			var task = Task
+				.Run(() => WorkOnItem())
+				.ContinueWith(t => _currentRunningTasks.Remove(t));
+
+			_currentRunningTasks.Add(task);
+
+			return task;
 		}
 
 		private List<Task> _currentRunningTasks = new List<Task>();

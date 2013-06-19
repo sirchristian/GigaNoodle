@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IQueue.cs" />
+    <Compile Include="Objects\QueueComparer.cs" />
     <Compile Include="Objects\QueueItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
