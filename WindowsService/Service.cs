@@ -60,7 +60,10 @@ namespace GigaNoodle.WindowsService
 
 			// do the work if we have any
 			if (item != null)
+			{
+				Console.WriteLine(String.Format("Working on {0}", item.CorrelationId));
 				item.DoWork();
+			}
 			else
 				System.Threading.Thread.Sleep(300);
 

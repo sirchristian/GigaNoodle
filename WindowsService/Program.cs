@@ -1,7 +1,11 @@
-﻿using Ninject;
+﻿using GigaNoodle.Library.Interfaces;
+using GigaNoodle.Library.Objects;
+using GigaNoodle.WindowsService.Config;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,15 +24,32 @@ namespace GigaNoodle.WindowsService
 
 			Args a = new Args();
 			CommandLine.Parser.Default.ParseArguments(args, a);
-			
+
+			var queues = new List<IQueue>();
+
+			// Get the config 
+			var config = GigaNoodleConfigHandler.CurrentConfig;
+			var allBaseKnownTypes = new List<Type>();
+			foreach (QueueItemTypes knownTypes in config.KnownTypes)
+				allBaseKnownTypes.AddRange(knownTypes.GetAllQueueItemType());
+
+			// Go through the queues and add them
+			foreach (Queue queue in config.Queues)
+			{
+				var knownTypes = new List<Type>();
+				knownTypes.AddRange(allBaseKnownTypes);
+				knownTypes.AddRange(queue.KnownTypes.GetAllQueueItemType());
+
+				queues.Add((IQueue)Activator.CreateInstance(queue.Type, queue.Name, queue.Priority, knownTypes.ToArray()));
+			}
+
 			if (a.Action == ArgAction.Debug)
 			{
 				// run as a console app
 				Console.WriteLine("Starting service as console app. Hit <enter> to stop.");
 
 				var service = new Service();
-				service.TheQueues = new List<Library.Interfaces.IQueue>();
-				service.TheQueues.Add(new MemoryQueue.MemoryQueue("consolequeue", 1));
+				service.TheQueues = queues;
 				service.Start();
 
 				// block until <enter>
@@ -43,7 +64,7 @@ namespace GigaNoodle.WindowsService
 				ServiceBase[] ServicesToRun;
 				ServicesToRun = new ServiceBase[] 
 				{ 
-					new Service() 
+					new Service() { TheQueues = queues }
 				};
 				ServiceBase.Run(ServicesToRun);
 			}
