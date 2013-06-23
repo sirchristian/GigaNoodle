@@ -1,4 +1,6 @@
-- Use new async/task stuff in service
-- Use Ninject to inject based off config/command line
-- Deal with empty queue better?
-- better queue management
+- Review async work in service
+- Clean up configuration section
+- Allow multiple threads to work at once
+- Add to NuGet
+- Allow rabbitmq to be configured
+- Populate CID in rabbitmq if not passed in
