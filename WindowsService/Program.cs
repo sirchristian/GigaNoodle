@@ -18,7 +18,10 @@ namespace GigaNoodle.WindowsService
 			var kernel = new StandardKernel();
 			kernel.Load(new ServiceModule());
 
-			if (args.Contains("action=debug"))
+			Args a = new Args();
+			CommandLine.Parser.Default.ParseArguments(args, a);
+			
+			if (a.Action == ArgAction.Debug)
 			{
 				// run as a console app
 				Console.WriteLine("Starting service as console app. Hit <enter> to stop.");
@@ -30,6 +33,10 @@ namespace GigaNoodle.WindowsService
 
 				// block until <enter>
 				Console.ReadLine();
+			}
+			else if (a.Action == ArgAction.Help)
+			{
+				Console.WriteLine();
 			}
 			else
 			{

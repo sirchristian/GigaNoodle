@@ -1,5 +1,3 @@
-- Use NuGet Packages
-- Find/Install command line parameter package
 - Use new async/task stuff in service
 - Use Ninject to inject based off config/command line
 - Deal with empty queue better?

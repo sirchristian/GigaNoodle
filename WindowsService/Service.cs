@@ -40,7 +40,7 @@ namespace GigaNoodle.WindowsService
 		internal void Start()
 		{
 			// Queue up a task
-			var task = CreateDoWorkTask();
+			var task = CreateWorkOnItemTask();
 		}
 
 		private void WorkOnItem()
@@ -66,10 +66,10 @@ namespace GigaNoodle.WindowsService
 
 			// if not stopping queue up another task
 			if (!stopping)
-				CreateDoWorkTask();
+				CreateWorkOnItemTask();
 		}
 
-		private Task CreateDoWorkTask()
+		private Task CreateWorkOnItemTask()
 		{
 			var task = Task
 				.Run(() => WorkOnItem())
