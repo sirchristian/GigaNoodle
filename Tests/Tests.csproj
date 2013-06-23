@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
+    <Compile Include="IntegrationTests\RabbitMQ\QueueingTest.cs" />
     <Compile Include="QueueTests\QueueItemTests.cs" />
     <Compile Include="TestImplementation\TestQueue.cs" />
     <Compile Include="TestModule.cs" />
@@ -72,6 +73,10 @@
     <ProjectReference Include="..\MemoryQueue\MemoryQueue.csproj">
       <Project>{562f29f3-eda6-48f0-9ed5-b29853ee2461}</Project>
       <Name>MemoryQueue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RabbitMQueue\RabbitMQueue.csproj">
+      <Project>{760f04bf-53d3-4f0d-948f-e6dafe3dc000}</Project>
+      <Name>RabbitMQueue</Name>
     </ProjectReference>
     <ProjectReference Include="..\WindowsService\WindowsService.csproj">
       <Project>{fec8f72a-41b7-49f0-a37f-3ef21d74cdf3}</Project>

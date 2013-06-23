@@ -22,7 +22,7 @@ namespace GigaNoodle.RabbitMQueue
 		public RabbitMQueue(string name, int priority, params Type[] knownTypes)
 		{
 			_name = name;
-			_exchangeName = String.Format("{0}.Direct", _name);
+			_exchangeName = String.Format("{0}.direct", _name);
 			_priority = priority;
 			_knownTypes = knownTypes;
 		}
@@ -67,7 +67,11 @@ namespace GigaNoodle.RabbitMQueue
 				byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(Utility.Serialize(item, _knownTypes));
 
 				// publish the message on the queue
-				RabbitMQChannel.BasicPublish(_exchangeName, routingKey: null, basicProperties: null, body: messageBodyBytes);
+				IBasicProperties props = RabbitMQChannel.CreateBasicProperties();
+				props.ContentType = "text/plain";
+				props.DeliveryMode = 2;
+				props.Priority = (byte)_priority;
+				RabbitMQChannel.BasicPublish(_exchangeName, routingKey: "", mandatory:false, immediate:false, basicProperties: props, body: messageBodyBytes);
 			}
 			finally
 			{
@@ -90,12 +94,15 @@ namespace GigaNoodle.RabbitMQueue
 				if (result == null)
 					return null;
 				else
+				{
+					// acknowledge receipt of the message
+					RabbitMQChannel.BasicAck(result.DeliveryTag, false);
 					return Utility.Deserialize<QueueItem>(result.Body, _knownTypes);
+				}
 			}
 			finally
 			{
-				// acknowledge receipt of the message
-				RabbitMQChannel.BasicAck(result.DeliveryTag, false);
+				CleanupChannel();
 			}
 		}
 
@@ -111,14 +118,14 @@ namespace GigaNoodle.RabbitMQueue
 				if (_channel == null)
 				{
 					ConnectionFactory factory = new ConnectionFactory();
-					factory.Uri = "amqp://user:pass@hostName:port/vhost";
+					factory.Uri = "amqp://guest:guest@localhost:5672/";
 					_conn = factory.CreateConnection();
 					_channel = _conn.CreateModel();
 
 					// Setup the exchange and queue and bind them together
 					_channel.ExchangeDeclare(_exchangeName, ExchangeType.Direct);
 					_channel.QueueDeclare(_name, durable: true, exclusive: false, autoDelete: false, arguments: null);
-					_channel.QueueBind(_name, _exchangeName, routingKey: null, arguments: null);
+					_channel.QueueBind(_name, _exchangeName, routingKey: "", arguments: null);
 				}
 
 				return _channel;
@@ -127,10 +134,18 @@ namespace GigaNoodle.RabbitMQueue
 
 		private void CleanupChannel()
 		{
-			_channel.Close(200, "Goodbye");
-			_conn.Close();
-			_conn = null;
-			_channel = null;
+			try
+			{
+				_channel.Close(200, "Goodbye");
+				_conn.Close();
+				_conn = null;
+				_channel = null;
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine("Error Cleaning up queue");
+				Console.WriteLine(ex.ToString());
+			}
 		}
 		private IModel _channel = null;
 		private IConnection _conn = null;
