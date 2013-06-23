@@ -17,7 +17,7 @@ namespace GigaNoodle.Tests.QueueTests
 			item.NonSerializableString = "Non";
 			item.SerializableInt = 1;
 			item.SerializableString = "Oui";
-			string xml = Utility.Deserialize<QueueItem>(item, typeof(TestQueueItem));
+			string xml = Utility.Serialize<QueueItem>(item, typeof(TestQueueItem));
 			Assert.IsTrue(xml.Contains("SerializableInt"));
 			Assert.IsTrue(xml.Contains("SerializableString"));
 			Assert.IsFalse(xml.Contains("NonSerializableInt"));
